@@ -34,6 +34,7 @@ def SaveAircrafts (aircrafts, filename):
 def PrintAircrafts (aircrafts):
     for aircraft in aircrafts:
         PrintAircraft(aircraft)
+        print("-" * 20)
 
 def AddAircrafts (aircrafts, aircraft):
     aircrafts.append(aircraft)
