@@ -3,7 +3,6 @@ from tkinter import ttk, messagebox, filedialog
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-
 # ==========================================
 # MÓDULOS DE CLASES Y LÓGICA DE DATOS
 # ==========================================
@@ -13,7 +12,6 @@ class Aircraft:
         self.callsign = callsign
         self.type = type
         self.capacity = int(capacity)
-
 
 def LoadAircrafts(filename):
     aircrafts = []
@@ -27,16 +25,13 @@ def LoadAircrafts(filename):
         return []
     return aircrafts
 
-
 def SaveAircrafts(aircrafts, filename):
     with open(filename, "w") as file:
         for aircraft in aircrafts:
             file.write(f"{aircraft.callsign} {aircraft.type} {aircraft.capacity}\n")
 
-
 def AddAircrafts(aircrafts, aircraft):
     aircrafts.append(aircraft)
-
 
 def RemoveAircrafts(aircrafts, callsign):
     for i, aircraft in enumerate(aircrafts):
@@ -44,7 +39,6 @@ def RemoveAircrafts(aircrafts, callsign):
             del aircrafts[i]
             return 0
     return -1
-
 
 class Flight:
     def __init__(self, ID, DepartureAirport, ArrivalAirport, DepartureTime, ArrivalTime, Passangers):
@@ -54,7 +48,6 @@ class Flight:
         self.DepartureTime = DepartureTime.strip()
         self.ArrivalTime = ArrivalTime.strip()
         self.Passangers = int(Passangers)
-
 
 def TimeToMinutes(time_str):
     try:
@@ -66,7 +59,6 @@ def TimeToMinutes(time_str):
     except ValueError:
         return -1
 
-
 def FlightDuration(flight):
     departure = TimeToMinutes(flight.DepartureTime)
     arrival = TimeToMinutes(flight.ArrivalTime)
@@ -76,7 +68,6 @@ def FlightDuration(flight):
     if duration < 0:
         duration += 24 * 60
     return duration
-
 
 def LoadFlights(filename):
     flights = []
@@ -106,17 +97,14 @@ def LoadFlights(filename):
         return []
     return flights
 
-
 def SaveFlights(flights, filename):
     with open(filename, "w") as file:
         for flight in flights:
             file.write(
                 f"{flight.ID} {flight.DepartureAirport} {flight.ArrivalAirport} {flight.DepartureTime} {flight.ArrivalTime} {flight.Passangers}\n")
 
-
 def AddFlights(flights, flight):
     flights.append(flight)
-
 
 def RemoveFlights(flights, flight_id):
     for i, flight in enumerate(flights):
@@ -125,13 +113,11 @@ def RemoveFlights(flights, flight_id):
             return 0
     return -1
 
-
 class Airline:
     def __init__(self, name, fleet, operations):
         self.name = name
         self.fleet = fleet
         self.operations = operations
-
 
 # ==========================================
 # INTERFAZ GRÁFICA ESTILIZADA (TEMA CLARO)
@@ -240,6 +226,7 @@ class AirlineApp(tk.Tk):
     # ---------------------------------------------------------
     # PESTAÑA AIRCRAFTS
     # ---------------------------------------------------------
+    
     def _build_aircraft_tab(self):
         card_form = tk.Frame(self.tab_aircrafts, bg=self.card_bg, padx=15, pady=15,
                              highlightbackground=self.border_color, highlightthickness=1)
@@ -333,6 +320,7 @@ class AirlineApp(tk.Tk):
     # ---------------------------------------------------------
     # PESTAÑA FLIGHTS
     # ---------------------------------------------------------
+    
     def _build_flight_tab(self):
         card_form = tk.Frame(self.tab_flights, bg=self.card_bg, padx=15, pady=15, highlightbackground=self.border_color,
                              highlightthickness=1)
@@ -447,6 +435,7 @@ class AirlineApp(tk.Tk):
     # ---------------------------------------------------------
     # PESTAÑA PLOT / GRÁFICO
     # ---------------------------------------------------------
+    
     def _build_plot_tab(self):
         control_frame = tk.Frame(self.tab_plot, bg=self.card_bg, padx=15, pady=12,
                                  highlightbackground=self.border_color, highlightthickness=1)
