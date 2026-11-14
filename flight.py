@@ -77,7 +77,8 @@ def SaveFlights (flights, filename):
 def PrintFlights (flights):
     for flight in flights:
         PrintFlight(flight)
-
+        print("-" * 20)
+        
 def AddFlights (flights, flight):
     flights.append(flight)
 
