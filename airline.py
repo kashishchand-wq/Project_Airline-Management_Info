@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 class Airline:
    def __init__(self, name, fleet, operations):
        self.name = name
@@ -5,15 +7,24 @@ class Airline:
        self.operations = operations
 
 def PrintAirline (airline):
+    print("=" * 25)
     print("Name: ", airline.name)
+    print("=" * 25)
+
     print("Fleet: ")
     for aircraft in airline.fleet:
         PrintAircraft(aircraft)
+        print("-" * 20)
+
     print("Operations: ")
     for flight in airline.operations:
         PrintFlight(flight)
+        print("-" * 20)
 
-import matplotlib.pyplot as plt
+    print("Airports: ")
+    for airport in airline.airports:
+        PrintAirport(airport)
+        print("-" * 20)
 
 def PlotFlights (airline):
     hours = list(range(24))
