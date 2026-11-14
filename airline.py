@@ -21,11 +21,6 @@ def PrintAirline (airline):
         PrintFlight(flight)
         print("-" * 20)
 
-    print("Airports: ")
-    for airport in airline.airports:
-        PrintAirport(airport)
-        print("-" * 20)
-
 def PlotFlights (airline):
     hours = list(range(24))
     flights_per_hour = [0] * 24
