@@ -1,45 +1,72 @@
 class Aircraft:
-   def __init__(self, callsign, type, capacity):
-       self.callsign = callsign
-       self.type = type
-       self.capacity = capacity
+    def __init__(self, callsign, type, capacity, airport=""):
+        self.callsign = callsign
+        self.type = type
+        self.capacity = int(capacity)
+        self.airport = airport
 
-def PrintAircraft (aircraft):
-    print("Callsign: ", aircraft.callsign)
-    print("Type: ", aircraft.type)
-    print("Capacity: ", aircraft.capacity)
+def PrintAircraft(aircraft):
+    print("Callsign:", aircraft.callsign)
+    print("Type:", aircraft.type)
+    print("Capacity:", aircraft.capacity)
+    print("Airport:", aircraft.airport)
 
-def LoadAircrafts (filename):
+def LoadAircrafts(filename):
     aircrafts = []
     try:
         with open(filename, "r") as F:
             for line in F:
                 parts = line.strip().split()
-                if len(parts) == 3:
-                    callsign = parts[0]
-                    type = parts[1]
-                    capacity = int(parts[2])
-
-                    aircraft = Aircraft(callsign, type, capacity)
-                    aircrafts.append(aircraft)
+                if len(parts) >= 3:
+                    try:
+                        callsign = parts[0]
+                        ac_type = parts[1]
+                        capacity = int(parts[2])
+                        airport = parts[3] if len(parts) >= 4 else ""
+                        aircrafts.append(Aircraft(callsign, ac_type, capacity, airport))
+                    except ValueError:
+                        continue
     except FileNotFoundError:
         return []
     return aircrafts
 
-def SaveAircrafts (aircrafts, filename):
-    with open(filename, "w") as file:
-        for aircraft in aircrafts:
-            file.write(f"{aircraft.callsign} {aircraft.type} {aircraft.capacity}\n")
+def LoadInitialPositions(aircrafts, filename):
+    """Asigna el aeropuerto inicial a cada avión leyendo AircraftInitialPositions_X.txt"""
+    try:
+        with open(filename, "r") as F:
+            for line in F:
+                parts = line.strip().split()
+                if len(parts) == 3 and parts[0] != "CALLSIGN":
+                    callsign, _, airport = parts
+                    for ac in aircrafts:
+                        if ac.callsign == callsign:
+                            ac.airport = airport
+    except FileNotFoundError:
+        return -1
+    return 0
 
-def PrintAircrafts (aircrafts):
+def SaveAircrafts(aircrafts, filename):
+    with open(filename, "w") as file:
+        file.write("CALLSIGN AC-TYPE SEATS AIRPORT\n")
+        for aircraft in aircrafts:
+            file.write(f"{aircraft.callsign} {aircraft.type} {aircraft.capacity} {aircraft.airport}\n")
+
+def SaveAircraftPositions(aircrafts, filename):
+    """Guarda las ubicaciones de los aviones en el formato oficial CALLSIGN AC-TYPE AIRP"""
+    with open(filename, "w") as file:
+        file.write("CALLSIGN AC-TYPE AIRP\n")
+        for aircraft in aircrafts:
+            file.write(f"{aircraft.callsign} {aircraft.type} {aircraft.airport}\n")
+
+def PrintAircrafts(aircrafts):
     for aircraft in aircrafts:
         PrintAircraft(aircraft)
         print("-" * 20)
 
-def AddAircrafts (aircrafts, aircraft):
+def AddAircrafts(aircrafts, aircraft):
     aircrafts.append(aircraft)
 
-def RemoveAircrafts (aircrafts, callsign):
+def RemoveAircrafts(aircrafts, callsign):
     for aircraft in aircrafts:
         if aircraft.callsign == callsign:
             aircrafts.remove(aircraft)
@@ -48,36 +75,10 @@ def RemoveAircrafts (aircrafts, callsign):
 
 # test section
 if __name__ == "__main__":
-    # Create some aircrafts
-    aircraft1 = Aircraft("AAAA", "A220-100", 135)
-    aircraft2 = Aircraft("BBBB", "A230-100", 200)
-    aircrafts = [aircraft1, aircraft2]
-
-    # Test PrintAircrafts
-    print("Initial aircrafts:")
-    PrintAircrafts(aircrafts)
-
-    # Test SaveAircrafts
-    SaveAircrafts(aircrafts, "aircrafts-new.txt")
-    print("\nAircrafts saved to file.")
-
-    # Test LoadAircrafts
     loaded_aircrafts = LoadAircrafts("Aircrafts.txt")
-    print("\nLoaded aircrafts:")
+    LoadInitialPositions(loaded_aircrafts, "AircraftInitialPositions_A.txt")
+    print("Loaded aircrafts with initial positions:")
     PrintAircrafts(loaded_aircrafts)
 
-    # Test AddAircraft
-    aircraft3 = Aircraft("CCCC", "A320-200", 180)
-    AddAircrafts(loaded_aircrafts, aircraft3)
-    print("\nAfter adding an aircraft:")
-    PrintAircrafts(loaded_aircrafts)
-
-    # Test RemoveAircraft
-    result = RemoveAircrafts(loaded_aircrafts, "BBBB")
-    print("\nAfter removing aircraft BBBB:")
-    PrintAircrafts(loaded_aircrafts)
-    print("Remove result:", result)
-
-    # Test removing a non-existing aircraft
-    result = RemoveAircrafts(loaded_aircrafts, "XXXX")
-    print("Remove non-existing aircraft result:", result)
+    SaveAircraftPositions(loaded_aircrafts, "AircraftPositions_End.txt")
+    print("Saved positions to AircraftPositions_End.txt")
